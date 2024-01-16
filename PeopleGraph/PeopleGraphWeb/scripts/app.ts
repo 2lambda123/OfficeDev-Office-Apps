@@ -59,6 +59,7 @@ module DataViz {
 
     function loadResourcesAndInitApp(resourceUrl: string, reason: string) {
         var retryCount: number = 3;
+
         $.getScript(resourceUrl, () => {
                 ensureDependancies(retryCount, () => {
                     DataViz.mainApp.init(reason);
