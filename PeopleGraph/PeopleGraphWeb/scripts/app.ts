@@ -1,5 +1,5 @@
 ﻿/* **************************************************************************************
-Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. 
+Copyright (c) Microsoft Open Technologies, Inc. All rights reserved.
 Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 ***************************************************************************************** */
 
@@ -146,7 +146,7 @@ module DataViz {
         public get LayoutInstance(): DataViz.Chart.LayoutInstance {
             return this.layoutInstance;
         }
-       
+
         /**
           * Initializes the app
           */
@@ -221,7 +221,7 @@ module DataViz {
                 DataViz.UX.DataPane.Instance.show(true); // show data pane and focus into the title box
             });
 
-            
+
             var resizeHandler = (event: any) => {
                 if (this.timeoutId) {
                     clearTimeout(this.timeoutId);

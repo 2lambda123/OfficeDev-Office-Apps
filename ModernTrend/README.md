@@ -111,15 +111,15 @@ For more details of D3 related APIs like [`d3.select()`](https://github.com/mbos
 
 ### Buiding projects
 
-**1. Prerequisites:**  
-&nbsp;&nbsp;&nbsp;&nbsp;Install the following components before you get started:  
-&nbsp;&nbsp;&nbsp;&nbsp;a. [Visual Studio 2013](http://msdn.microsoft.com/en-us/library/dd831853.aspx)  
-&nbsp;&nbsp;&nbsp;&nbsp;b. [TypeScript for Visual Studio 2012 and 2013](http://www.microsoft.com/en-us/download/details.aspx?id=34790)  
+**1. Prerequisites:**
+&nbsp;&nbsp;&nbsp;&nbsp;Install the following components before you get started:
+&nbsp;&nbsp;&nbsp;&nbsp;a. [Visual Studio 2013](http://msdn.microsoft.com/en-us/library/dd831853.aspx)
+&nbsp;&nbsp;&nbsp;&nbsp;b. [TypeScript for Visual Studio 2012 and 2013](http://www.microsoft.com/en-us/download/details.aspx?id=34790)
 &nbsp;&nbsp;&nbsp;&nbsp;c. Microsoft Excel 2013
 
-**2. Debug and run the app:**  
-&nbsp;&nbsp;&nbsp;&nbsp;a. Launch Visual Studio 2013  
-&nbsp;&nbsp;&nbsp;&nbsp;b. Open the ModernTrend project  
+**2. Debug and run the app:**
+&nbsp;&nbsp;&nbsp;&nbsp;a. Launch Visual Studio 2013
+&nbsp;&nbsp;&nbsp;&nbsp;b. Open the ModernTrend project
 &nbsp;&nbsp;&nbsp;&nbsp;c. Add breakpoints in the typescript files and click _Start Debugging_ or press F5 to start debugging
 
 ### More resources
