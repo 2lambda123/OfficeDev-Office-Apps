@@ -160,7 +160,7 @@
   <PropertyGroup>
     <PostBuildEvent>copy /b $(ProjectDir)\Scripts\Wikipedia_vars.js+$(ProjectDir)\Scripts\Wikipedia_utils.js+$(ProjectDir)\Scripts\Wikipedia_navigation.js+$(ProjectDir)\Scripts\Wikipedia_sandbox.js+$(ProjectDir)\Scripts\Wikipedia_tabs.js+$(ProjectDir)\Scripts\Wikipedia_ui.js $(ProjectDir)\Scripts\Wikipedia_dev.js</PostBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
