@@ -28,24 +28,27 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Utility functions for string handling
 var StrUtil = {
-  empty : "",
+  empty: "",
 
-  trimWhiteSpace : function(str) { return str.replace(/^\s+|\s+$/g, ""); },
+  trimWhiteSpace: function (str) {
+    return str.replace(/^\s+|\s+$/g, "");
+  },
 
-  replaceDoubleBackSlashWithHTTPS : function(str) {
+  replaceDoubleBackSlashWithHTTPS: function (str) {
     if (str && str.replace) {
-      return str.replace(/src="\/\//g, "src=\"https://")
-          .replace(/href="\/\//g, "href=\"https://");
+      return str
+        .replace(/src="\/\//g, 'src="https://')
+        .replace(/href="\/\//g, 'href="https://');
     } else {
       return str;
     }
   },
 
-  parseIDFromUrl : function(url) {
+  parseIDFromUrl: function (url) {
     return url.replace(/\/wiki\//g, StrUtil.empty).replace(/_/g, " ");
   },
 
-  parseImageTitleFromUrl : function(url) {
+  parseImageTitleFromUrl: function (url) {
     var lastSlashPosition = url.lastIndexOf("/");
     var secondLastSlashPosition = url.lastIndexOf("/", lastSlashPosition - 1);
     var title = url.substring(secondLastSlashPosition + 1, lastSlashPosition);
@@ -58,7 +61,7 @@ var StrUtil = {
   },
 
   //  Handle the non-ANSI characters to follow ANSI compliance
-  encodeTextWithHTMLEntities : function(text) {
+  encodeTextWithHTMLEntities: function (text) {
     var encodedText = "";
     var encodedArray = [];
     var len = text.length;
@@ -73,13 +76,13 @@ var StrUtil = {
     }
 
     return encodedArray.join("");
-  }
+  },
 };
 
 // These functions construct html content for the app
 var CodeSnippet = {
   // The inserted image and source html content
-  insertedImage : function(src, fileName, detailPage) {
+  insertedImage: function (src, fileName, detailPage) {
     var imageDiv = document.createElement("div");
     var image = document.createElement("img");
     var sourceDir = document.createElement("div");
@@ -91,7 +94,8 @@ var CodeSnippet = {
     sourceLink.setAttribute("href", detailPage);
     sourceLink.appendChild(document.createTextNode(UIStrings.wikiMainURL));
     source.appendChild(
-        document.createTextNode(UIStrings.source + " " + fileName + " - "));
+      document.createTextNode(UIStrings.source + " " + fileName + " - "),
+    );
     source.appendChild(sourceLink);
     sourceDir.appendChild(source);
 
@@ -99,16 +103,19 @@ var CodeSnippet = {
   },
 
   // The insert image button html content
-  insertImageBox : function() {
+  insertImageBox: function () {
     var imageInsertDiv = document.createElement("div");
     var imageInsertButton = document.createElement("div");
     var imageInsertIcon = document.createElement("img");
 
-    imageInsertDiv.setAttribute("class",
-                                Selectors.clickableClassName + " " +
-                                    Selectors.imageInsertButtonClassName);
-    imageInsertButton.setAttribute("class",
-                                   Selectors.imageInsertButtonIconClassName);
+    imageInsertDiv.setAttribute(
+      "class",
+      Selectors.clickableClassName + " " + Selectors.imageInsertButtonClassName,
+    );
+    imageInsertButton.setAttribute(
+      "class",
+      Selectors.imageInsertButtonIconClassName,
+    );
     imageInsertButton.setAttribute("title", UIStrings.insert);
     imageInsertIcon.setAttribute("src", "images/insettodoc_image_24x.png");
     imageInsertButton.appendChild(imageInsertIcon);
@@ -118,7 +125,7 @@ var CodeSnippet = {
   },
 
   // The insert image loading html content
-  insertImageCover : function() {
+  insertImageCover: function () {
     var imageInsertCoverDiv = document.createElement("div");
 
     imageInsertCoverDiv.setAttribute("class", Selectors.imageLoadingClassName);
@@ -127,28 +134,33 @@ var CodeSnippet = {
   },
 
   // The inserted text and source html content
-  insertText : function(text, title) {
+  insertText: function (text, title) {
     var textInsertedDiv = document.createElement("div");
     var sourceDiv = document.createElement("div");
     var source = document.createElement("i");
     var sourceLink = document.createElement("a");
 
     textInsertedDiv.appendChild(
-        document.createTextNode("\"" + text.trim() + "\""));
-    sourceLink.setAttribute("href",
-                            (UIStrings.browserUrlPrefix + title).toString());
+      document.createTextNode('"' + text.trim() + '"'),
+    );
+    sourceLink.setAttribute(
+      "href",
+      (UIStrings.browserUrlPrefix + title).toString(),
+    );
     sourceLink.appendChild(document.createTextNode(UIStrings.wikiMainURL));
     source.appendChild(
-        document.createTextNode(UIStrings.source + " " + title + " - "));
+      document.createTextNode(UIStrings.source + " " + title + " - "),
+    );
     source.appendChild(sourceLink);
     sourceDiv.appendChild(source);
 
-    return StrUtil.encodeTextWithHTMLEntities(textInsertedDiv.outerHTML +
-                                              sourceDiv.outerHTML);
+    return StrUtil.encodeTextWithHTMLEntities(
+      textInsertedDiv.outerHTML + sourceDiv.outerHTML,
+    );
   },
 
   // The hidden input html content in images submenu
-  storeDetailUrl : function(wikiUrl) {
+  storeDetailUrl: function (wikiUrl) {
     var input = document.createElement("input");
 
     if (wikiUrl.indexOf("https://") < 0) {
@@ -162,14 +174,18 @@ var CodeSnippet = {
   },
 
   // The expand table link html content
-  newTableExpand : function() {
+  newTableExpand: function () {
     var tableToggleDiv = document.createElement("div");
     var tableToggleImage = document.createElement("img");
 
-    tableToggleDiv.setAttribute("class", Selectors.clickableClassName + " " +
-                                             Selectors.tableToggleClassName +
-                                             " " +
-                                             Selectors.tableExpandedClassName);
+    tableToggleDiv.setAttribute(
+      "class",
+      Selectors.clickableClassName +
+        " " +
+        Selectors.tableToggleClassName +
+        " " +
+        Selectors.tableExpandedClassName,
+    );
     tableToggleDiv.setAttribute("title", UIStrings.tableExpand);
     tableToggleDiv.appendChild(document.createTextNode(UIStrings.tableExpand));
 
@@ -177,37 +193,46 @@ var CodeSnippet = {
   },
 
   // The collapse table link html content
-  newTableCollapse : function() {
+  newTableCollapse: function () {
     var tableToggleDiv = document.createElement("div");
 
-    tableToggleDiv.setAttribute("class", Selectors.clickableClassName + " " +
-                                             Selectors.tableToggleClassName +
-                                             " " +
-                                             Selectors.tableCollapsedClassName);
+    tableToggleDiv.setAttribute(
+      "class",
+      Selectors.clickableClassName +
+        " " +
+        Selectors.tableToggleClassName +
+        " " +
+        Selectors.tableCollapsedClassName,
+    );
     tableToggleDiv.setAttribute("title", UIStrings.tableCollapse);
     tableToggleDiv.appendChild(
-        document.createTextNode(UIStrings.tableCollapse));
+      document.createTextNode(UIStrings.tableCollapse),
+    );
 
     return tableToggleDiv.outerHTML;
   },
 
   // The infobox table toggle html content
-  wrapInInfoBox : function(html) {
+  wrapInInfoBox: function (html) {
     var infobox = document.createElement("table");
 
-    infobox.setAttribute("class", Selectors.infoboxClassName + " " +
-                                      Selectors.tableAutoExpandClassName);
+    infobox.setAttribute(
+      "class",
+      Selectors.infoboxClassName + " " + Selectors.tableAutoExpandClassName,
+    );
     infobox.innerHTML = html;
 
     return infobox.outerHTML;
   },
 
   // The no result error message container html content
-  noResultErrorMessageContainer : function(message) {
+  noResultErrorMessageContainer: function (message) {
     var noResultErrorMessageContainer = document.createElement("span");
 
-    noResultErrorMessageContainer.setAttribute("class",
-                                               Selectors.fishbowlClassName);
+    noResultErrorMessageContainer.setAttribute(
+      "class",
+      Selectors.fishbowlClassName,
+    );
     noResultErrorMessageContainer.innerHTML = "";
     noResultErrorMessageContainer.appendChild(document.createTextNode(message));
 
@@ -215,7 +240,7 @@ var CodeSnippet = {
   },
 
   // The expand and contract article button
-  toggleArticleButton : function() {
+  toggleArticleButton: function () {
     var articleToggleDiv = document.createElement("div");
 
     articleToggleDiv.setAttribute("id", Selectors.articleToggleClassName);
@@ -229,7 +254,7 @@ var CodeSnippet = {
   },
 
   // The back to main article button
-  backToMainArticleButton : function() {
+  backToMainArticleButton: function () {
     var backToMainDiv = document.createElement("div");
 
     backToMainDiv.setAttribute("id", Selectors.backToMainClassName);
@@ -243,46 +268,58 @@ var CodeSnippet = {
   },
 
   // The expanded article area html content
-  expandedSectionsContainer : function() {
+  expandedSectionsContainer: function () {
     var expandedSectionsContainerDiv = document.createElement("div");
 
     expandedSectionsContainerDiv.setAttribute(
-        "id", Selectors.expandedSectionsContainerClassName);
+      "id",
+      Selectors.expandedSectionsContainerClassName,
+    );
 
     return expandedSectionsContainerDiv.outerHTML;
-  }
+  },
 };
 
 // To change the css style for the checkbox to indicate it has been checked or
 // unchecked
 var CheckboxUtil = {
-  checkBoxCheck : function() {
-    $(Selectors.autosearchCheckBoxIcon)
-        .attr("src", "images/checkmarkchecked_16x.png");
+  checkBoxCheck: function () {
+    $(Selectors.autosearchCheckBoxIcon).attr(
+      "src",
+      "images/checkmarkchecked_16x.png",
+    );
   },
 
-  checkBoxNotCheck : function() {
-    $(Selectors.autosearchCheckBoxIcon)
-        .attr("src", "images/checkmarknotcheckedd_16x.png");
-  }
+  checkBoxNotCheck: function () {
+    $(Selectors.autosearchCheckBoxIcon).attr(
+      "src",
+      "images/checkmarknotcheckedd_16x.png",
+    );
+  },
 };
 
 // To change the css style for the submenu tab to indicate it has been selected
 var SubmenuStyle = {
-  submenuSelected : function(tab) {
-    toggleSelectorstyle(tab, Selectors.tabUnselectedClassName,
-                        Selectors.tabSelectedClassName);
+  submenuSelected: function (tab) {
+    toggleSelectorstyle(
+      tab,
+      Selectors.tabUnselectedClassName,
+      Selectors.tabSelectedClassName,
+    );
   },
 
-  submenuNotSelected : function(tab) {
-    toggleSelectorstyle(tab, Selectors.tabSelectedClassName,
-                        Selectors.tabUnselectedClassName);
-  }
+  submenuNotSelected: function (tab) {
+    toggleSelectorstyle(
+      tab,
+      Selectors.tabSelectedClassName,
+      Selectors.tabUnselectedClassName,
+    );
+  },
 };
 
 // This function is used to change the css style for the html item to which the
 // parameter "tag" pointed.
-var toggleSelectorstyle = function(tag, oldStyle, newStyle) {
+var toggleSelectorstyle = function (tag, oldStyle, newStyle) {
   if (tag.hasClass(oldStyle)) {
     tag.removeClass(oldStyle);
   }
@@ -290,15 +327,15 @@ var toggleSelectorstyle = function(tag, oldStyle, newStyle) {
 };
 
 var SandboxInteraction = {
-  sandBoxHostURl : "",
+  sandBoxHostURl: "",
 
-  messageSequenceNo : 0,
+  messageSequenceNo: 0,
 
-  sandboxSequenceNo : 0,
+  sandboxSequenceNo: 0,
 
-  sandboxTimeout : null,
+  sandboxTimeout: null,
 
-  initialSandbox : function() {
+  initialSandbox: function () {
     // Check hosting url and assign sandbox url
     var hostUrl = document.location.hostname.toLowerCase();
 
@@ -315,17 +352,19 @@ var SandboxInteraction = {
     iFrame.setAttribute("sandbox", "allow-scripts allow-same-origin");
     iFrame.setAttribute("tabindex", "-1");
     iFrame.setAttribute(
-        "src", SandboxInteraction.sandBoxHostURl.concat("/sandbox.html"));
+      "src",
+      SandboxInteraction.sandBoxHostURl.concat("/sandbox.html"),
+    );
     document.body.appendChild(iFrame);
   },
 
-  resetMessageIndex : function() {
+  resetMessageIndex: function () {
     if (SandboxInteraction.messageSequenceNo >= 0xffff) {
       SandboxInteraction.messageSequenceNo = 0;
     }
   },
 
-  sandboxEventListener : function(event) {
+  sandboxEventListener: function (event) {
     if (event.origin !== SandboxInteraction.sandBoxHostURl) {
       return;
     } else {
@@ -341,198 +380,219 @@ var SandboxInteraction = {
 
     SandboxInteraction.sandboxSequenceNo = messageJson.sequence;
 
-    if (SandboxInteraction.sandboxSequenceNo !==
-        SandboxInteraction.messageSequenceNo) {
+    if (
+      SandboxInteraction.sandboxSequenceNo !==
+      SandboxInteraction.messageSequenceNo
+    ) {
       return;
     }
 
     switch (messageJson.message.callback) {
-    case "updateSectionCallback":
-      if (!GlobalVars.nextState.isNewArticle) {
-        GlobalVars.nextState = State.newSectionView();
-      }
+      case "updateSectionCallback":
+        if (!GlobalVars.nextState.isNewArticle) {
+          GlobalVars.nextState = State.newSectionView();
+        }
 
-      GlobalVars.nextState.article = messageJson.message.content;
+        GlobalVars.nextState.article = messageJson.message.content;
 
-      if (GlobalVars.nextState.isNewArticle) {
-        GlobalVars.nextState.article += CodeSnippet.toggleArticleButton();
-      } else {
-        GlobalVars.nextState.article += CodeSnippet.backToMainArticleButton();
-        GlobalVars.nextState.tocReady = true;
-      }
+        if (GlobalVars.nextState.isNewArticle) {
+          GlobalVars.nextState.article += CodeSnippet.toggleArticleButton();
+        } else {
+          GlobalVars.nextState.article += CodeSnippet.backToMainArticleButton();
+          GlobalVars.nextState.tocReady = true;
+        }
 
-      GlobalVars.nextState.topic =
-          decodeURIComponent(messageJson.message.redirectTitle);
-      GlobalVars.nextState.articleReady = true;
-      GlobalVars.nextState.writeToPage(true);
-      UI.showFullArticleButton();
-      UI.hideLoadingScreen();
-
-      break;
-    case "updateTocCallback":
-      if (messageJson.message.referenceID &&
-          messageJson.message.referenceID !== 0) {
-        GlobalVars.nextState.referenceID = messageJson.message.referenceID;
-      }
-
-      GlobalVars.nextState.toc = messageJson.message.toc;
-      GlobalVars.nextState.tocReady = true;
-      GlobalVars.nextState.type = State.TypeEnum.article;
-      GlobalVars.nextState.writeToPage(true);
-
-      break;
-    case "expandArticleCallback":
-      UI.writeToArticleExpansionContainer(messageJson.message.content);
-      UI.hideLoadingScreen();
-
-      break;
-    case "updateImagesGridCallback":
-      if (GlobalVars.nextState.type === State.TypeEnum.images &&
-          GlobalVars.currState.type !== State.TypeEnum.images) {
+        GlobalVars.nextState.topic = decodeURIComponent(
+          messageJson.message.redirectTitle,
+        );
+        GlobalVars.nextState.articleReady = true;
         GlobalVars.nextState.writeToPage(true);
-      }
+        UI.showFullArticleButton();
+        UI.hideLoadingScreen();
 
-      if (GlobalVars.nextState.type !== State.TypeEnum.images &&
-          GlobalVars.currState.type !== State.TypeEnum.images) {
-        SandboxInteraction.sandboxPostMessage("cancel");
+        break;
+      case "updateTocCallback":
+        if (
+          messageJson.message.referenceID &&
+          messageJson.message.referenceID !== 0
+        ) {
+          GlobalVars.nextState.referenceID = messageJson.message.referenceID;
+        }
 
-        return;
-      }
+        GlobalVars.nextState.toc = messageJson.message.toc;
+        GlobalVars.nextState.tocReady = true;
+        GlobalVars.nextState.type = State.TypeEnum.article;
+        GlobalVars.nextState.writeToPage(true);
 
-      $(Selectors.article).append(messageJson.message.content);
-      UI.processSection($(Selectors.article).children().last());
+        break;
+      case "expandArticleCallback":
+        UI.writeToArticleExpansionContainer(messageJson.message.content);
+        UI.hideLoadingScreen();
 
-      break;
-    case "updateFullSizedPictureCallback":
-      // The only reason full size image is fetched is insertion to a document.
-      Client.insertImage(CodeSnippet.insertedImage(
-          messageJson.message.imgUrl, messageJson.message.fileName,
-          messageJson.message.detailUrl));
+        break;
+      case "updateImagesGridCallback":
+        if (
+          GlobalVars.nextState.type === State.TypeEnum.images &&
+          GlobalVars.currState.type !== State.TypeEnum.images
+        ) {
+          GlobalVars.nextState.writeToPage(true);
+        }
 
-      break;
-    case "updateReferenceCallback":
-      GlobalVars.nextState = State.newSectionView();
-      GlobalVars.nextState.type = State.TypeEnum.reference;
-      GlobalVars.nextState.article = messageJson.message.content;
-      GlobalVars.nextState.articleReady = true;
-      GlobalVars.nextState.writeToPage(true);
+        if (
+          GlobalVars.nextState.type !== State.TypeEnum.images &&
+          GlobalVars.currState.type !== State.TypeEnum.images
+        ) {
+          SandboxInteraction.sandboxPostMessage("cancel");
 
-      break;
-    case "updateCategoryCallback":
-      GlobalVars.nextState.article = messageJson.message.content;
-      GlobalVars.nextState.toc = StrUtil.empty;
-      GlobalVars.nextState.tocReady = true;
-      GlobalVars.nextState.articleReady = true;
-      GlobalVars.nextState.type = State.TypeEnum.category;
-      GlobalVars.nextState.writeToPage(true);
+          return;
+        }
 
-      break;
-    case "searchWikiCallback":
-      UI.hideFullArticleButton();
-      GlobalVars.nextState.article = messageJson.message.content;
-      GlobalVars.nextState.articleReady = true;
-      GlobalVars.nextState.tocReady = true;
-      GlobalVars.nextState.type = State.TypeEnum.search;
-      GlobalVars.nextState.writeToPage(true);
+        $(Selectors.article).append(messageJson.message.content);
+        UI.processSection($(Selectors.article).children().last());
 
-      break;
-    case "searchCancel":
-      UI.hideLoadingScreen();
+        break;
+      case "updateFullSizedPictureCallback":
+        // The only reason full size image is fetched is insertion to a document.
+        Client.insertImage(
+          CodeSnippet.insertedImage(
+            messageJson.message.imgUrl,
+            messageJson.message.fileName,
+            messageJson.message.detailUrl,
+          ),
+        );
 
-      break;
-    case "noResult":
-      GlobalVars.nextState.topic = GlobalVars.currState.topic;
-      GlobalVars.nextState.isNewArticle = false;
-      UI.writeError(messageJson.message.errorMessage, ErrorType.notFoundResult);
+        break;
+      case "updateReferenceCallback":
+        GlobalVars.nextState = State.newSectionView();
+        GlobalVars.nextState.type = State.TypeEnum.reference;
+        GlobalVars.nextState.article = messageJson.message.content;
+        GlobalVars.nextState.articleReady = true;
+        GlobalVars.nextState.writeToPage(true);
 
-      break;
-    case "error":
-      UI.writeError(messageJson.message.errorMessage, ErrorType.error);
+        break;
+      case "updateCategoryCallback":
+        GlobalVars.nextState.article = messageJson.message.content;
+        GlobalVars.nextState.toc = StrUtil.empty;
+        GlobalVars.nextState.tocReady = true;
+        GlobalVars.nextState.articleReady = true;
+        GlobalVars.nextState.type = State.TypeEnum.category;
+        GlobalVars.nextState.writeToPage(true);
 
-      break;
-    case "pullingFromCache":
-      UI.writeError(Errors.pullingFromCache, ErrorType.error);
+        break;
+      case "searchWikiCallback":
+        UI.hideFullArticleButton();
+        GlobalVars.nextState.article = messageJson.message.content;
+        GlobalVars.nextState.articleReady = true;
+        GlobalVars.nextState.tocReady = true;
+        GlobalVars.nextState.type = State.TypeEnum.search;
+        GlobalVars.nextState.writeToPage(true);
 
-      break;
+        break;
+      case "searchCancel":
+        UI.hideLoadingScreen();
+
+        break;
+      case "noResult":
+        GlobalVars.nextState.topic = GlobalVars.currState.topic;
+        GlobalVars.nextState.isNewArticle = false;
+        UI.writeError(
+          messageJson.message.errorMessage,
+          ErrorType.notFoundResult,
+        );
+
+        break;
+      case "error":
+        UI.writeError(messageJson.message.errorMessage, ErrorType.error);
+
+        break;
+      case "pullingFromCache":
+        UI.writeError(Errors.pullingFromCache, ErrorType.error);
+
+        break;
     }
   },
 
-  sandboxPostMessage : function(message, showLoading) {
+  sandboxPostMessage: function (message, showLoading) {
     if (showLoading) {
       UI.showLoadingScreen();
     }
 
     SandboxInteraction.resetMessageIndex();
     var messageSent = {
-      "message" : message,
-      "sequence" : ++SandboxInteraction.messageSequenceNo
+      message: message,
+      sequence: ++SandboxInteraction.messageSequenceNo,
     };
-    document.getElementById(Selectors.sandboxClassName)
-        .contentWindow.postMessage(JSON.stringify(messageSent),
-                                   SandboxInteraction.sandBoxHostURl);
+    document
+      .getElementById(Selectors.sandboxClassName)
+      .contentWindow.postMessage(
+        JSON.stringify(messageSent),
+        SandboxInteraction.sandBoxHostURl,
+      );
     SandboxInteraction.sandboxTimeout = setTimeout(
-        "UI.writeError(Errors.sandboxServiceDown, ErrorType.error)", 30000);
+      "UI.writeError(Errors.sandboxServiceDown, ErrorType.error)",
+      30000,
+    );
   },
 
-  postSearchArticleMessage : function(title) {
-    var message = {"function" : "updateArticle", "title" : title};
+  postSearchArticleMessage: function (title) {
+    var message = { function: "updateArticle", title: title };
     SandboxInteraction.sandboxPostMessage(message, true);
   },
 
-  postEntireArticleMessage : function(title) {
-    var message = {"function" : "expandArticle", "title" : title};
+  postEntireArticleMessage: function (title) {
+    var message = { function: "expandArticle", title: title };
     SandboxInteraction.sandboxPostMessage(message, true);
   },
 
-  postSectionMessage : function(title, sectionID) {
+  postSectionMessage: function (title, sectionID) {
     var message = {
-      "function" : "updateSection",
-      "title" : title,
-      "sectionID" : sectionID
+      function: "updateSection",
+      title: title,
+      sectionID: sectionID,
     };
     SandboxInteraction.sandboxPostMessage(message, true);
   },
 
-  postImageMessage : function(title) {
-    var message = {"function" : "updateImagesGrid", "title" : title};
+  postImageMessage: function (title) {
+    var message = { function: "updateImagesGrid", title: title };
     SandboxInteraction.sandboxPostMessage(message, true);
   },
 
-  postFullSizedImageMessage : function(title, maxImageWidth) {
+  postFullSizedImageMessage: function (title, maxImageWidth) {
     var message = {
-      "function" : "updateFullSizedPicture",
-      "title" : title,
-      "maxImageWidth" : maxImageWidth
+      function: "updateFullSizedPicture",
+      title: title,
+      maxImageWidth: maxImageWidth,
     };
     SandboxInteraction.sandboxPostMessage(message, false);
   },
 
-  postReferenceMessage : function(title, sectionID) {
+  postReferenceMessage: function (title, sectionID) {
     var message = {
-      "function" : "updateReference",
-      "title" : title,
-      "sectionID" : sectionID
+      function: "updateReference",
+      title: title,
+      sectionID: sectionID,
     };
     SandboxInteraction.sandboxPostMessage(message, true);
-  }
-}
+  },
+};
 
 var ServiceWorker = {
-  address : "/sw.js",
+  address: "/sw.js",
 
   // Installs service worker
-  init : function() {
-    if ('serviceWorker' in navigator) {
+  init: function () {
+    if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register(ServiceWorker.address);
     }
   },
 
-  uninstall : function() {
-    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+  uninstall: function () {
+    navigator.serviceWorker.getRegistrations().then(function (registrations) {
       for (let registration of registrations) {
         console.log(registration.scope);
         registration.unregister();
       }
-    })
-  }
-}
+    });
+  },
+};

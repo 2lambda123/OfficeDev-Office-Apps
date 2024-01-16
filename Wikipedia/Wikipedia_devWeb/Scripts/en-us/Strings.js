@@ -29,47 +29,47 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 var LANGUAGE = "en";
 
 var Errors = {
-  textInsertionFailureForMultiCell :
-      "We can't insert the text into multiple cells. Please select one single cell.",
-  docCodeError :
-      "This document is in Read-Only mode. Please enable editing before insertion.",
-  sandboxServiceDown :
-      "The content doesn’t exist or is not accessible due to connectivity issues.",
-  jsonParseError : "Json parse error.",
-  pullingFromCache : "Cannot connect to Wikipedia. Pulling data from cache."
+  textInsertionFailureForMultiCell:
+    "We can't insert the text into multiple cells. Please select one single cell.",
+  docCodeError:
+    "This document is in Read-Only mode. Please enable editing before insertion.",
+  sandboxServiceDown:
+    "The content doesn’t exist or is not accessible due to connectivity issues.",
+  jsonParseError: "Json parse error.",
+  pullingFromCache: "Cannot connect to Wikipedia. Pulling data from cache.",
 };
 
 var UIStrings = {
-  mainPageHint :
-      "The app can search from Wikipedia automatically and insert seamlessly the information to your document.",
-  welcomeMessage : "I want to know...",
-  loadingMessage : "Loading...",
-  insert : "Insert",
-  seeAlsoHeader : "See also",
-  backTitle : "Back",
-  searchTitle : "Search",
-  searchOptionTitle : "Search Options",
-  autosearch : "autoSearch",
-  autosearchTitle : "AutoSearch",
-  browser : "Search in browser",
-  sectionsTab : "Sections",
-  imagesTab : "Images",
-  infoboxTab : "Infobox",
-  referenceTab : "References",
-  ellipses : "",
-  expandArticle : "Expand Article",
-  contractArticle : "Collapse Article",
-  backToMain : "Back to Article",
-  tableExpand : "Show this table",
-  tableCollapse : "Hide this table",
-  errorHeading : "There is a problem.",
-  warningHeading : "Warning",
-  suggestionMessage : "No results found. <br />Suggestions:",
-  source : "Source:",
-  aboutMessage :
-      "Wikipedia trademarks are used with permission from the Wikimedia Foundation",
-  searchKeywordLimitMessage : "The search text is limited to 100 characters",
-  wikiMainURL : "https://" + LANGUAGE + ".wikipedia.org",
-  browserUrlPrefix :
-      "https://" + LANGUAGE + ".wikipedia.org/wiki/special:search/"
+  mainPageHint:
+    "The app can search from Wikipedia automatically and insert seamlessly the information to your document.",
+  welcomeMessage: "I want to know...",
+  loadingMessage: "Loading...",
+  insert: "Insert",
+  seeAlsoHeader: "See also",
+  backTitle: "Back",
+  searchTitle: "Search",
+  searchOptionTitle: "Search Options",
+  autosearch: "autoSearch",
+  autosearchTitle: "AutoSearch",
+  browser: "Search in browser",
+  sectionsTab: "Sections",
+  imagesTab: "Images",
+  infoboxTab: "Infobox",
+  referenceTab: "References",
+  ellipses: "",
+  expandArticle: "Expand Article",
+  contractArticle: "Collapse Article",
+  backToMain: "Back to Article",
+  tableExpand: "Show this table",
+  tableCollapse: "Hide this table",
+  errorHeading: "There is a problem.",
+  warningHeading: "Warning",
+  suggestionMessage: "No results found. <br />Suggestions:",
+  source: "Source:",
+  aboutMessage:
+    "Wikipedia trademarks are used with permission from the Wikimedia Foundation",
+  searchKeywordLimitMessage: "The search text is limited to 100 characters",
+  wikiMainURL: "https://" + LANGUAGE + ".wikipedia.org",
+  browserUrlPrefix:
+    "https://" + LANGUAGE + ".wikipedia.org/wiki/special:search/",
 };

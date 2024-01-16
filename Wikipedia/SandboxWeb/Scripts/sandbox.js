@@ -27,28 +27,27 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 var Selectors = {
-  clickableClassName : "ms_osf_clickable",
+  clickableClassName: "ms_osf_clickable",
   // Section toc classes
-  tocClassName : "ms_osf_toc",
-  tocItemClassName : "ms_osf_tocItem",
+  tocClassName: "ms_osf_toc",
+  tocItemClassName: "ms_osf_tocItem",
   // Image classes
-  imageClassName : "image",
-  imageTableClassName : "img_table",
-  imageContainerClassName : "ms_osf_imageContainer",
+  imageClassName: "image",
+  imageTableClassName: "img_table",
+  imageContainerClassName: "ms_osf_imageContainer",
   // Category classes
-  categoryMemberClassName : "ms_osf_categoryMember",
+  categoryMemberClassName: "ms_osf_categoryMember",
   // Search result classes
-  searchResultClassName : "ms_osf_searchResult",
-  searchTitleClassName : "ms_osf_searchTitle",
-  searchSnippetClassName : "ms_osf_snippet",
-  searchResultCountClassName : "ms_osf_searchResultCount",
+  searchResultClassName: "ms_osf_searchResult",
+  searchTitleClassName: "ms_osf_searchTitle",
+  searchSnippetClassName: "ms_osf_snippet",
+  searchResultCountClassName: "ms_osf_searchResultCount",
 };
 
 // Used to filter out undesired images or other media that would otherwise
 // take up space in the images panel.
-var ImageCheck = new function() {
-  var list =
-      [ "jpg", "jpeg", "exif", "tiff", "raw", "png", "gif", "bmp", "svg" ];
+var ImageCheck = new (function () {
+  var list = ["jpg", "jpeg", "exif", "tiff", "raw", "png", "gif", "bmp", "svg"];
   // In Wikipedia "relevant" images are formatted
   // exactly the same as icons and other meta-images. Here are some regex that
   // encapsulate the file formats of many of the informational images so that
@@ -95,7 +94,7 @@ var ImageCheck = new function() {
     /\d*px-Disambig(-|_).*\.svg/,
     /\d*px-Gnome-mime.*\.svg/,
     /Magnify-clip.png/,
-    /\d*px-Gtk-.*\.svg/
+    /\d*px-Gtk-.*\.svg/,
   ];
   var notShownLength = notShown.length;
 
@@ -104,7 +103,7 @@ var ImageCheck = new function() {
   // Returns an appropriate boolean.
   // Parameters:
   //      url: The file that needs to be checked.
-  this.isImage = function(url) {
+  this.isImage = function (url) {
     if (!url) {
       return false;
     }
@@ -118,7 +117,7 @@ var ImageCheck = new function() {
   // the image is article-specific, false if it is a common Wikipedia/media
   // image. Parameters:
   //      url: The file that needs to be checked.
-  this.notWikimediaImage = function(url) {
+  this.notWikimediaImage = function (url) {
     var imageAllowed = true;
 
     for (var index = 0; imageAllowed && index < notShownLength; index++) {
@@ -129,55 +128,68 @@ var ImageCheck = new function() {
 
     return imageAllowed;
   };
-}();
+})();
 
 var StrUtil = {
-  empty : "",
+  empty: "",
 
-  trimWhiteSpace : function(str) { return str.replace(/^\s+|\s+$/g, ""); },
+  trimWhiteSpace: function (str) {
+    return str.replace(/^\s+|\s+$/g, "");
+  },
 
-  startsWith : function(original, prefix) {
+  startsWith: function (original, prefix) {
     return StrUtil.trimWhiteSpace(original).indexOf(prefix) === 0;
   },
 
-  processURI : function(
-      term) { return encodeURIComponent(decodeURIComponent(term)); },
+  processURI: function (term) {
+    return encodeURIComponent(decodeURIComponent(term));
+  },
 
-  escapeQuotes : function(
-      term) { return term.replace(/'/g, "\\'").replace(/"/g, '\\"'); },
+  escapeQuotes: function (term) {
+    return term.replace(/'/g, "\\'").replace(/"/g, '\\"');
+  },
 
-  replaceDoubleBackSlashWithHTTPS : function(str) {
+  replaceDoubleBackSlashWithHTTPS: function (str) {
     if (str && typeof str === "string") {
-      return str.replace(/src="\/\//g, "src=\"https://")
-          .replace(/href="\/\//g, "href=\"https://");
+      return str
+        .replace(/src="\/\//g, 'src="https://')
+        .replace(/href="\/\//g, 'href="https://');
     } else {
       return str;
     }
   },
 
-  getExtension : function(url) {
+  getExtension: function (url) {
     var postfix = url.substring(url.lastIndexOf(".") + 1).toLowerCase();
     return postfix.lastIndexOf("/") > -1
-               ? postfix.substring(0, postfix.length - 1)
-               : postfix;
-  }
-}
+      ? postfix.substring(0, postfix.length - 1)
+      : postfix;
+  },
+};
 
 // These functions construct html content for the app
 var CodeSnippet = {
   // The chapter(table of content) html content in Sections submenu
-  newTOCEntry : function(obj) {
+  newTOCEntry: function (obj) {
     if (obj.toclevel > 1) {
       return StrUtil.empty;
     }
 
     var entryDiv = document.createElement("div");
 
-    entryDiv.setAttribute("class", Selectors.clickableClassName + " " +
-                                       Selectors.tocItemClassName + " " +
-                                       Selectors.tocClassName + obj.toclevel);
-    entryDiv.setAttribute("onclick",
-                          "Navigation.updateSection(\"" + obj.index + "\")");
+    entryDiv.setAttribute(
+      "class",
+      Selectors.clickableClassName +
+        " " +
+        Selectors.tocItemClassName +
+        " " +
+        Selectors.tocClassName +
+        obj.toclevel,
+    );
+    entryDiv.setAttribute(
+      "onclick",
+      'Navigation.updateSection("' + obj.index + '")',
+    );
     entryDiv.setAttribute("title", obj.line);
     entryDiv.setAttribute("tabindex", 100 + parseInt(obj.index));
     entryDiv.appendChild(document.createTextNode(obj.line));
@@ -186,7 +198,7 @@ var CodeSnippet = {
   },
 
   // The image html content in Images submenu
-  newImageGrouping : function(img, url, title, size) {
+  newImageGrouping: function (img, url, title, size) {
     var imageGroupDiv = document.createElement("div");
     var imageLink = document.createElement("a");
     var image = document.createElement("img");
@@ -195,8 +207,9 @@ var CodeSnippet = {
     image.setAttribute("alt", title);
     image.setAttribute("class", Selectors.imageTableClassName);
     imageLink.setAttribute("class", Selectors.imageClassName);
-    imageLink.innerHTML =
-        (image.outerHTML + CodeSnippet.storeDetailUrl(url)).toString();
+    imageLink.innerHTML = (
+      image.outerHTML + CodeSnippet.storeDetailUrl(url)
+    ).toString();
     imageGroupDiv.setAttribute("style", "width:" + size + "px; max-width:96%");
     imageGroupDiv.setAttribute("class", Selectors.imageContainerClassName);
     imageGroupDiv.appendChild(imageLink);
@@ -205,7 +218,7 @@ var CodeSnippet = {
   },
 
   // The hidden input html content in Images submenu
-  storeDetailUrl : function(wikiUrl) {
+  storeDetailUrl: function (wikiUrl) {
     var input = document.createElement("input");
 
     if (wikiUrl.indexOf("https://") < 0) {
@@ -219,16 +232,19 @@ var CodeSnippet = {
 
   // The new search html content when there is ambiguous meanings of search
   // string
-  newSearchSnippets : function(ele) {
+  newSearchSnippets: function (ele) {
     var searchResultDiv = document.createElement("div");
     var searchTitleDiv = document.createElement("div");
     var searchSnippetDiv = document.createElement("div");
 
-    searchTitleDiv.setAttribute("class", Selectors.clickableClassName + " " +
-                                             Selectors.searchTitleClassName);
-    searchTitleDiv.setAttribute("onclick", "Navigation.updateArticle(\'" +
-                                               StrUtil.escapeQuotes(ele.title) +
-                                               "\')");
+    searchTitleDiv.setAttribute(
+      "class",
+      Selectors.clickableClassName + " " + Selectors.searchTitleClassName,
+    );
+    searchTitleDiv.setAttribute(
+      "onclick",
+      "Navigation.updateArticle('" + StrUtil.escapeQuotes(ele.title) + "')",
+    );
     searchTitleDiv.appendChild(document.createTextNode(ele.title));
     searchSnippetDiv.setAttribute("class", Selectors.searchSnippetClassName);
     searchSnippetDiv.innerHTML = ele.snippet;
@@ -240,61 +256,70 @@ var CodeSnippet = {
   },
 
   // The total html content of suggested results
-  newSearchResultTotal : function(total, searchTerm) {
+  newSearchResultTotal: function (total, searchTerm) {
     var searchResultCountDiv = document.createElement("div");
 
     searchResultCountDiv.setAttribute("class", Selectors.clickableClassName);
-    searchResultCountDiv.setAttribute("id",
-                                      Selectors.searchResultCountClassName);
-    searchResultCountDiv.setAttribute("onclick",
-                                      "Navigation.openArticleInBrowser()");
+    searchResultCountDiv.setAttribute(
+      "id",
+      Selectors.searchResultCountClassName,
+    );
+    searchResultCountDiv.setAttribute(
+      "onclick",
+      "Navigation.openArticleInBrowser()",
+    );
     searchResultCountDiv.appendChild(
-        document.createTextNode(UIStrings.searchResult(total)));
+      document.createTextNode(UIStrings.searchResult(total)),
+    );
 
     return searchResultCountDiv.outerHTML;
   },
 
-  newCatMemberEntry : function(title) {
+  newCatMemberEntry: function (title) {
     var newCatMemberEntryDiv = document.createElement("div");
 
-    newCatMemberEntryDiv.setAttribute("class",
-                                      Selectors.clickableClassName + " " +
-                                          Selectors.categoryMemberClassName);
-    newCatMemberEntryDiv.setAttribute("onclick",
-                                      "Navigation.updateArticle(\'" +
-                                          StrUtil.escapeQuotes(title) + "\')");
+    newCatMemberEntryDiv.setAttribute(
+      "class",
+      Selectors.clickableClassName + " " + Selectors.categoryMemberClassName,
+    );
+    newCatMemberEntryDiv.setAttribute(
+      "onclick",
+      "Navigation.updateArticle('" + StrUtil.escapeQuotes(title) + "')",
+    );
     newCatMemberEntryDiv.appendChild(document.createTextNode(title));
 
     return newCatMemberEntryDiv.outerHTML;
   },
 
-  subcategoryTitle : function() {
+  subcategoryTitle: function () {
     var subcategoryTitle = document.createElement("h2");
 
     subcategoryTitle.appendChild(
-        document.createTextNode(UIStrings.subcategoryHeading));
+      document.createTextNode(UIStrings.subcategoryHeading),
+    );
 
     return subcategoryTitle.outerHTML;
   },
 
-  categoryPagesTitle : function() {
+  categoryPagesTitle: function () {
     var categoryPagesTitle = document.createElement("h2");
 
     categoryPagesTitle.appendChild(
-        document.createTextNode(UIStrings.categoryPagesTitle));
+      document.createTextNode(UIStrings.categoryPagesTitle),
+    );
 
     return categoryPagesTitle.outerHTML;
-  }
+  },
 };
 
 var WikipediaAppInteraction = {
-  wikipediaHostURL : "",
+  wikipediaHostURL: "",
 
-  wikipediaSearchTitle : "",
+  wikipediaSearchTitle: "",
 
-  wikipediaSequenceNo : 0,
+  wikipediaSequenceNo: 0,
 
-  initial : function() {
+  initial: function () {
     // Check sandobx url and assign hosting url
     var hostUrl = document.location.hostname.toLowerCase();
 
@@ -306,15 +331,17 @@ var WikipediaAppInteraction = {
     }
   },
 
-  wikipediaPostMessage : function(message, sequenceNo) {
+  wikipediaPostMessage: function (message, sequenceNo) {
     if (WikipediaAppInteraction.wikipediaSequenceNo === sequenceNo) {
-      var messageSent = {"message" : message, "sequence" : sequenceNo};
-      parent.postMessage(JSON.stringify(messageSent),
-                         WikipediaAppInteraction.wikipediaHostURL);
+      var messageSent = { message: message, sequence: sequenceNo };
+      parent.postMessage(
+        JSON.stringify(messageSent),
+        WikipediaAppInteraction.wikipediaHostURL,
+      );
     }
   },
 
-  wikipediaEventListener : function(event) {
+  wikipediaEventListener: function (event) {
     if (event.origin !== WikipediaAppInteraction.wikipediaHostURL) {
       return;
     }
@@ -330,134 +357,163 @@ var WikipediaAppInteraction = {
     WikipediaAppInteraction.wikipediaSequenceNo = messageJson.sequence;
 
     switch (messageJson.message.function) {
-    case "updateArticle":
-      WikipediaAppInteraction.wikipediaSearchTitle = messageJson.message.title;
+      case "updateArticle":
+        WikipediaAppInteraction.wikipediaSearchTitle =
+          messageJson.message.title;
 
-      if (Wikipedia.isCategoryQuery(
-              WikipediaAppInteraction.wikipediaSearchTitle)) {
-        Wikipedia.getCategoryMembers(
+        if (
+          Wikipedia.isCategoryQuery(
             WikipediaAppInteraction.wikipediaSearchTitle,
-            JSONParser.updateCategoryCallback);
-      } else {
-        // Get the introduction chapter of the article from Wikipedia
-        Wikipedia.getHTMLBySectionAsync(
+          )
+        ) {
+          Wikipedia.getCategoryMembers(
+            WikipediaAppInteraction.wikipediaSearchTitle,
+            JSONParser.updateCategoryCallback,
+          );
+        } else {
+          // Get the introduction chapter of the article from Wikipedia
+          Wikipedia.getHTMLBySectionAsync(
             WikipediaAppInteraction.wikipediaSearchTitle,
             Wikipedia.INTRODUCTION_SECTION_ID,
-            JSONParser.updateSectionCallback);
-        // Get the chapters(table of content) of the article from Wikipedia
-        Wikipedia.getTableOfContentAsync(
+            JSONParser.updateSectionCallback,
+          );
+          // Get the chapters(table of content) of the article from Wikipedia
+          Wikipedia.getTableOfContentAsync(
             WikipediaAppInteraction.wikipediaSearchTitle,
-            JSONParser.updateTocCallback, JSONParser.blankTocCallback);
-      }
+            JSONParser.updateTocCallback,
+            JSONParser.blankTocCallback,
+          );
+        }
 
-      break;
-    case "expandArticle":
-      Wikipedia.getEntireArticle(messageJson.message.title,
-                                 JSONParser.expandArticleCallback);
+        break;
+      case "expandArticle":
+        Wikipedia.getEntireArticle(
+          messageJson.message.title,
+          JSONParser.expandArticleCallback,
+        );
 
-      break;
-    case "updateSection":
-      WikipediaAppInteraction.wikipediaSearchTitle = messageJson.message.title;
+        break;
+      case "updateSection":
+        WikipediaAppInteraction.wikipediaSearchTitle =
+          messageJson.message.title;
 
-      Wikipedia.getHTMLBySectionAsync(messageJson.message.title,
-                                      messageJson.message.sectionID,
-                                      JSONParser.updateSectionCallback);
+        Wikipedia.getHTMLBySectionAsync(
+          messageJson.message.title,
+          messageJson.message.sectionID,
+          JSONParser.updateSectionCallback,
+        );
 
-      break;
-    case "updateImagesGrid":
-      Wikipedia.getImagesForArticle(messageJson.message.title,
-                                    JSONParser.updateImagesGridCallback);
+        break;
+      case "updateImagesGrid":
+        Wikipedia.getImagesForArticle(
+          messageJson.message.title,
+          JSONParser.updateImagesGridCallback,
+        );
 
-      break;
-    case "updateFullSizedPicture":
-      Wikipedia.getImage(messageJson.message.title,
-                         messageJson.message.maxImageWidth,
-                         JSONParser.updateFullSizedPictureCallback);
+        break;
+      case "updateFullSizedPicture":
+        Wikipedia.getImage(
+          messageJson.message.title,
+          messageJson.message.maxImageWidth,
+          JSONParser.updateFullSizedPictureCallback,
+        );
 
-      break;
-    case "updateReference":
-      Wikipedia.getReferenceSectionForArticle(
-          messageJson.message.title, messageJson.message.sectionID,
-          JSONParser.updateReferenceCallback);
+        break;
+      case "updateReference":
+        Wikipedia.getReferenceSectionForArticle(
+          messageJson.message.title,
+          messageJson.message.sectionID,
+          JSONParser.updateReferenceCallback,
+        );
 
-      break;
+        break;
     }
   },
 
-  postContentMessage : function(callbackName, content, sequenceNo) {
-    var message = {"callback" : callbackName, "content" : content};
+  postContentMessage: function (callbackName, content, sequenceNo) {
+    var message = { callback: callbackName, content: content };
     WikipediaAppInteraction.wikipediaPostMessage(message, sequenceNo);
   },
 
-  postSectionMessage : function(callbackName, content, redirectTitle,
-                                sequenceNo) {
+  postSectionMessage: function (
+    callbackName,
+    content,
+    redirectTitle,
+    sequenceNo,
+  ) {
     var message = {
-      "callback" : callbackName,
-      "content" : content,
-      "redirectTitle" : redirectTitle
+      callback: callbackName,
+      content: content,
+      redirectTitle: redirectTitle,
     };
     WikipediaAppInteraction.wikipediaPostMessage(message, sequenceNo);
   },
 
-  postTocMessage : function(callbackName, toc, tocLength, lastToc, referenceID,
-                            sequenceNo) {
+  postTocMessage: function (
+    callbackName,
+    toc,
+    tocLength,
+    lastToc,
+    referenceID,
+    sequenceNo,
+  ) {
     var message;
     if (referenceID !== 0) {
       message = {
-        "callback" : callbackName,
-        "toc" : toc,
-        "tocLength" : tocLength,
-        "lastToc" : lastToc,
-        "referenceID" : referenceID
+        callback: callbackName,
+        toc: toc,
+        tocLength: tocLength,
+        lastToc: lastToc,
+        referenceID: referenceID,
       };
     } else {
       message = {
-        "callback" : callbackName,
-        "toc" : toc,
-        "tocLength" : tocLength,
-        "lastToc" : lastToc
+        callback: callbackName,
+        toc: toc,
+        tocLength: tocLength,
+        lastToc: lastToc,
       };
     }
     WikipediaAppInteraction.wikipediaPostMessage(message, sequenceNo);
   },
 
-  postFullSizeImageMessage : function(imgUrl, fileName, detailUrl, sequenceNo) {
+  postFullSizeImageMessage: function (imgUrl, fileName, detailUrl, sequenceNo) {
     var message = {
-      "callback" : "updateFullSizedPictureCallback",
-      "imgUrl" : imgUrl,
-      "fileName" : fileName,
-      "detailUrl" : detailUrl
+      callback: "updateFullSizedPictureCallback",
+      imgUrl: imgUrl,
+      fileName: fileName,
+      detailUrl: detailUrl,
     };
     WikipediaAppInteraction.wikipediaPostMessage(message, sequenceNo);
   },
 
-  postErrorMessage : function(errorMessage, sequenceNo) {
-    var message = {"callback" : "error", "errorMessage" : errorMessage};
+  postErrorMessage: function (errorMessage, sequenceNo) {
+    var message = { callback: "error", errorMessage: errorMessage };
     WikipediaAppInteraction.wikipediaPostMessage(message, sequenceNo);
   },
 
-  postNoResultMessage : function(errorMessage, sequenceNo) {
-    var message = {"callback" : "noResult", "errorMessage" : errorMessage};
+  postNoResultMessage: function (errorMessage, sequenceNo) {
+    var message = { callback: "noResult", errorMessage: errorMessage };
     WikipediaAppInteraction.wikipediaPostMessage(message, sequenceNo);
   },
 
-  postSearchCancelMessage : function(sequenceNo) {
-    var message = {"callback" : "searchCancel"};
+  postSearchCancelMessage: function (sequenceNo) {
+    var message = { callback: "searchCancel" };
     WikipediaAppInteraction.wikipediaPostMessage(message, sequenceNo);
   },
 
-  postfromCacheMessage : function(sequenceNo) {
-    var message = {"callback" : "pullingFromCache"};
+  postfromCacheMessage: function (sequenceNo) {
+    var message = { callback: "pullingFromCache" };
     WikipediaAppInteraction.wikipediaPostMessage(message, sequenceNo);
-  }
-}
+  },
+};
 
 // The functions in Wikipedia are used to query article content through
 // Wikipedia's API.
-var Wikipedia = new function() {
+var Wikipedia = new (function () {
   this.INTRODUCTION_SECTION_ID = "0";
   var wikiAPIEntry =
-      "https://" + LANGUAGE + ".wikipedia.org/w/api.php?format=json&origin=*&";
+    "https://" + LANGUAGE + ".wikipedia.org/w/api.php?format=json&origin=*&";
   // Prefix for all images.
   this.filePrefix = "File:";
   this.categoryPrefix = "Category:";
@@ -489,64 +545,74 @@ var Wikipedia = new function() {
     // Using Fetch API to query Wikipedia. Get async result to callback when
     // query succeeds, and get error status when query fails.
     fetch(address)
-        .then(function(response) { return response.json(); })
-        .then(function(data) { callback(data); })
-        .catch(failedCallback);
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        callback(data);
+      })
+      .catch(failedCallback);
   }
 
-  this.serviceWorkerEventListener =
-      function(event) {
+  this.serviceWorkerEventListener = function (event) {
     if (event.origin !== WikipediaAppInteraction.wikipediaHostURL) {
       return;
     }
 
     switch (event.data) {
-    case "pullingFromCache":
-      WikipediaAppInteraction.postfromCacheMessage(
-          WikipediaAppInteraction.wikipediaSequenceNo);
+      case "pullingFromCache":
+        WikipediaAppInteraction.postfromCacheMessage(
+          WikipediaAppInteraction.wikipediaSequenceNo,
+        );
 
-      break;
+        break;
     }
-  }
+  };
 
-      // Query HTML content for specific search title
-      // Parameters:
-      //      pageTitle: the search string
-      //      sectionID: the chapter id of the searching article
-      //      callback: the query result
-      this.getHTMLBySectionAsync = function(pageTitle, sectionID, callback) {
+  // Query HTML content for specific search title
+  // Parameters:
+  //      pageTitle: the search string
+  //      sectionID: the chapter id of the searching article
+  //      callback: the query result
+  this.getHTMLBySectionAsync = function (pageTitle, sectionID, callback) {
     var _queryString =
-        wikiAPIEntry + "action=parse&redirects&prop=text&mobileformat=html";
-    var query = _queryString + "&page=" + StrUtil.processURI(pageTitle) +
-                "&section=" + sectionID;
+      wikiAPIEntry + "action=parse&redirects&prop=text&mobileformat=html";
+    var query =
+      _queryString +
+      "&page=" +
+      StrUtil.processURI(pageTitle) +
+      "&section=" +
+      sectionID;
 
     makeQuery(query, callback);
   };
 
   // Query chapters(table of content) of the article
-  this.getTableOfContentAsync = function(pageTitle, callback, failedCallback) {
+  this.getTableOfContentAsync = function (pageTitle, callback, failedCallback) {
     var _queryString =
-        wikiAPIEntry +
-        "action=mobileview&redirects&prop=sections|normalizedtitle&sectionprop=toclevel|line|index&page=";
+      wikiAPIEntry +
+      "action=mobileview&redirects&prop=sections|normalizedtitle&sectionprop=toclevel|line|index&page=";
 
-    makeQuery(_queryString + StrUtil.processURI(pageTitle), callback,
-              failedCallback);
+    makeQuery(
+      _queryString + StrUtil.processURI(pageTitle),
+      callback,
+      failedCallback,
+    );
   };
 
   // Query HTML content for the entire article
-  this.getEntireArticle = function(pageTitle, callback) {
+  this.getEntireArticle = function (pageTitle, callback) {
     var _queryString =
-        wikiAPIEntry +
-        "action=mobileview&prop=text&sections=all&redirect=yes&page=";
+      wikiAPIEntry +
+      "action=mobileview&prop=text&sections=all&redirect=yes&page=";
 
     makeQuery(_queryString + StrUtil.processURI(pageTitle), callback);
   };
 
   // Query all images of the article
-  this.getImagesForArticle = function(title, callback) {
+  this.getImagesForArticle = function (title, callback) {
     var _queryString =
-        wikiAPIEntry +
-        "action=query&prop=images&imlimit=500&redirects=&titles=";
+      wikiAPIEntry + "action=query&prop=images&imlimit=500&redirects=&titles=";
     makeQuery(_queryString + StrUtil.processURI(title), callback);
   };
 
@@ -554,75 +620,88 @@ var Wikipedia = new function() {
   // Parameters:
   //      title: image title
   //      widthLimit: image's maximum width
-  this.getImage = function(title, widthLimit, callback) {
+  this.getImage = function (title, widthLimit, callback) {
     var _queryString =
-        wikiAPIEntry +
-        "action=query&prop=imageinfo&iiprop=url|parsedcomment&iilimit=1&iiurlwidth=" +
-        widthLimit + "&titles=";
+      wikiAPIEntry +
+      "action=query&prop=imageinfo&iiprop=url|parsedcomment&iilimit=1&iiurlwidth=" +
+      widthLimit +
+      "&titles=";
 
     makeQuery(_queryString + StrUtil.processURI(title), callback);
   };
 
   // Query HTML content for reference of the article
-  this.getReferenceSectionForArticle = function(pageTitle, sectionID,
-                                                callback) {
+  this.getReferenceSectionForArticle = function (
+    pageTitle,
+    sectionID,
+    callback,
+  ) {
     var _queryString =
-        wikiAPIEntry + "action=mobileview&prop=text&redirect=yes&page=";
+      wikiAPIEntry + "action=mobileview&prop=text&redirect=yes&page=";
     var query =
-        _queryString + StrUtil.processURI(pageTitle) + "&sections=" + sectionID;
+      _queryString + StrUtil.processURI(pageTitle) + "&sections=" + sectionID;
 
     makeQuery(query, callback);
   };
 
   // Query suggested article for the specific search term
-  this.getResultsBySearchTermAsync = function(searchTerm, callback) {
+  this.getResultsBySearchTermAsync = function (searchTerm, callback) {
     var _searchLimit = 10;
-    var _queryString = wikiAPIEntry +
-                       "action=query&list=search&srnamespace=0&srlimit=" +
-                       _searchLimit.toString() + "&srsearch=";
+    var _queryString =
+      wikiAPIEntry +
+      "action=query&list=search&srnamespace=0&srlimit=" +
+      _searchLimit.toString() +
+      "&srsearch=";
 
     makeQuery(_queryString + StrUtil.processURI(searchTerm), callback);
   };
 
-  this.getCategoryMembers = function(category, callback) {
+  this.getCategoryMembers = function (category, callback) {
     var _queryString =
-        wikiAPIEntry +
-        "action=query&list=categorymembers&cmprop=title|type&cmtype=page|subcat&cmlimit=500&cmtitle=";
+      wikiAPIEntry +
+      "action=query&list=categorymembers&cmprop=title|type&cmtype=page|subcat&cmlimit=500&cmtitle=";
     makeQuery(_queryString + StrUtil.processURI(category), callback);
   };
 
-  this.isCategoryQuery = function(queryTitle) {
-    return StrUtil.startsWith(queryTitle.toLocaleLowerCase(),
-                              this.categoryPrefix.toLocaleLowerCase());
+  this.isCategoryQuery = function (queryTitle) {
+    return StrUtil.startsWith(
+      queryTitle.toLocaleLowerCase(),
+      this.categoryPrefix.toLocaleLowerCase(),
+    );
   };
 
-  this.isAFile = function(
-      fileTitle) { return StrUtil.startsWith(fileTitle, this.filePrefix); };
-}();
+  this.isAFile = function (fileTitle) {
+    return StrUtil.startsWith(fileTitle, this.filePrefix);
+  };
+})();
 
 // The functions in JSONParser handle the ajax async callback that is returned
 // by query through Wikipedia API
-var JSONParser = new function() {
+var JSONParser = new (function () {
   // The result of the article's specific chapter
-  this.updateSectionCallback = function(json) {
+  this.updateSectionCallback = function (json) {
     var sequenceNo = WikipediaAppInteraction.wikipediaSequenceNo;
 
     if (json.error) {
       Wikipedia.getResultsBySearchTermAsync(
-          WikipediaAppInteraction.wikipediaSearchTitle,
-          JSONParser.searchWikiCallback);
+        WikipediaAppInteraction.wikipediaSearchTitle,
+        JSONParser.searchWikiCallback,
+      );
     } else if (json.parse && json.parse.text) {
-      if (json.parse.title.toLocaleLowerCase() ===
-              WikipediaAppInteraction.wikipediaSearchTitle
-                  .toLocaleLowerCase() ||
-          json.parse.redirects && json.parse.redirects[0] &&
-              json.parse.redirects[0].from.toLocaleLowerCase() ===
-                  WikipediaAppInteraction.wikipediaSearchTitle
-                      .toLocaleLowerCase()) {
+      if (
+        json.parse.title.toLocaleLowerCase() ===
+          WikipediaAppInteraction.wikipediaSearchTitle.toLocaleLowerCase() ||
+        (json.parse.redirects &&
+          json.parse.redirects[0] &&
+          json.parse.redirects[0].from.toLocaleLowerCase() ===
+            WikipediaAppInteraction.wikipediaSearchTitle.toLocaleLowerCase())
+      ) {
         WikipediaAppInteraction.postSectionMessage(
-            "updateSectionCallback",
-            StrUtil.replaceDoubleBackSlashWithHTTPS(json.parse.text['*']),
-            json.parse.title, sequenceNo);
+          "updateSectionCallback",
+          StrUtil.replaceDoubleBackSlashWithHTTPS(json.parse.text["*"]),
+          json.parse.title,
+          sequenceNo,
+        );
       }
     } else {
       WikipediaAppInteraction.postErrorMessage(Errors.wikipedia, sequenceNo);
@@ -630,25 +709,30 @@ var JSONParser = new function() {
   };
 
   // This allows the page to load even if the table of contents fails
-  this.blankTocCallback = function() {
+  this.blankTocCallback = function () {
     var sequenceNo = WikipediaAppInteraction.wikipediaSequenceNo;
 
-    WikipediaAppInteraction.postTocMessage("updateTocCallback", "", 0,
-                                           UIStrings.introductionHeader, 0,
-                                           sequenceNo);
+    WikipediaAppInteraction.postTocMessage(
+      "updateTocCallback",
+      "",
+      0,
+      UIStrings.introductionHeader,
+      0,
+      sequenceNo,
+    );
   };
 
   // The result of chapters and the reference chapter ID of the article
-  this.updateTocCallback = function(json) {
+  this.updateTocCallback = function (json) {
     var sequenceNo = WikipediaAppInteraction.wikipediaSequenceNo;
 
     if (json.mobileview && json.mobileview.sections) {
       var content = json.mobileview.sections;
       var referenceID = 0;
       var toc = CodeSnippet.newTOCEntry({
-        toclevel : 1,
-        index : Wikipedia.INTRODUCTION_SECTION_ID,
-        line : UIStrings.introductionHeader
+        toclevel: 1,
+        index: Wikipedia.INTRODUCTION_SECTION_ID,
+        line: UIStrings.introductionHeader,
       });
 
       for (var i in content) {
@@ -665,19 +749,29 @@ var JSONParser = new function() {
       }
 
       if (content.length > 1) {
-        WikipediaAppInteraction.postTocMessage("updateTocCallback", toc,
-                                               content.length, content[1].line,
-                                               referenceID, sequenceNo);
+        WikipediaAppInteraction.postTocMessage(
+          "updateTocCallback",
+          toc,
+          content.length,
+          content[1].line,
+          referenceID,
+          sequenceNo,
+        );
       } else {
         WikipediaAppInteraction.postTocMessage(
-            "updateTocCallback", toc, content.length,
-            UIStrings.introductionHeader, referenceID, sequenceNo);
+          "updateTocCallback",
+          toc,
+          content.length,
+          UIStrings.introductionHeader,
+          referenceID,
+          sequenceNo,
+        );
       }
     }
   };
 
   // The result of the entire article
-  this.expandArticleCallback = function(json) {
+  this.expandArticleCallback = function (json) {
     var sequenceNo = WikipediaAppInteraction.wikipediaSequenceNo;
 
     if (json.mobileview && json.mobileview.sections) {
@@ -692,12 +786,15 @@ var JSONParser = new function() {
       }
     }
 
-    WikipediaAppInteraction.postContentMessage("expandArticleCallback", toWrite,
-                                               sequenceNo);
+    WikipediaAppInteraction.postContentMessage(
+      "expandArticleCallback",
+      toWrite,
+      sequenceNo,
+    );
   };
 
   // The result of all images of the article
-  this.updateImagesGridCallback = function(json) {
+  this.updateImagesGridCallback = function (json) {
     var sequenceNo = WikipediaAppInteraction.wikipediaSequenceNo;
 
     if (json.query && json.query.pages) {
@@ -708,8 +805,10 @@ var JSONParser = new function() {
 
         if (obj.images) {
           if (obj.images.length === 0) {
-            WikipediaAppInteraction.postErrorMessage(Errors.noImageFound,
-                                                     sequenceNo);
+            WikipediaAppInteraction.postErrorMessage(
+              Errors.noImageFound,
+              sequenceNo,
+            );
 
             break;
           } else {
@@ -719,40 +818,52 @@ var JSONParser = new function() {
               var _widthLimit = window.innerWidth;
 
               Wikipedia.getImage(
-                  obj.images[j].title, _widthLimit, function(result) {
-                    var imgUrl, imgTitle, descriptionUrl;
-                    var imageEntry = StrUtil.empty;
+                obj.images[j].title,
+                _widthLimit,
+                function (result) {
+                  var imgUrl, imgTitle, descriptionUrl;
+                  var imageEntry = StrUtil.empty;
 
-                    if (result.query && result.query.pages) {
-                      var imagePages = result.query.pages;
+                  if (result.query && result.query.pages) {
+                    var imagePages = result.query.pages;
 
-                      // Go through all the images and get the url.
-                      // Only show the image on the page, if its url passes all
-                      // the media/image checks. (see ImageCheck for details)
-                      for (var k in imagePages) {
-                        // In case some imagepage has no imageinfo
-                        if (imagePages[k].imageinfo) {
-                          imgUrl = imagePages[k].imageinfo[0].thumburl;
-                          imgTitle = imagePages[k].title;
+                    // Go through all the images and get the url.
+                    // Only show the image on the page, if its url passes all
+                    // the media/image checks. (see ImageCheck for details)
+                    for (var k in imagePages) {
+                      // In case some imagepage has no imageinfo
+                      if (imagePages[k].imageinfo) {
+                        imgUrl = imagePages[k].imageinfo[0].thumburl;
+                        imgTitle = imagePages[k].title;
 
-                          if (ImageCheck.isImage(imgUrl) &&
-                              ImageCheck.notWikimediaImage(imgUrl)) {
-                            descriptionUrl =
-                                imagePages[k].imageinfo[0].descriptionurl;
-                            imageEntry = CodeSnippet.newImageGrouping(
-                                imgUrl, descriptionUrl, imgTitle, _widthLimit);
-                          }
-
-                          break;
+                        if (
+                          ImageCheck.isImage(imgUrl) &&
+                          ImageCheck.notWikimediaImage(imgUrl)
+                        ) {
+                          descriptionUrl =
+                            imagePages[k].imageinfo[0].descriptionurl;
+                          imageEntry = CodeSnippet.newImageGrouping(
+                            imgUrl,
+                            descriptionUrl,
+                            imgTitle,
+                            _widthLimit,
+                          );
                         }
-                      }
 
-                      if (imageEntry !== StrUtil.empty) {
-                        WikipediaAppInteraction.postContentMessage(
-                            "updateImagesGridCallback", imageEntry, sequenceNo);
+                        break;
                       }
                     }
-                  });
+
+                    if (imageEntry !== StrUtil.empty) {
+                      WikipediaAppInteraction.postContentMessage(
+                        "updateImagesGridCallback",
+                        imageEntry,
+                        sequenceNo,
+                      );
+                    }
+                  }
+                },
+              );
             }
           }
           return;
@@ -762,7 +873,7 @@ var JSONParser = new function() {
   };
 
   // The result of full size image
-  this.updateFullSizedPictureCallback = function(json) {
+  this.updateFullSizedPictureCallback = function (json) {
     var sequenceNo = WikipediaAppInteraction.wikipediaSequenceNo;
     var imgUrl, fileName, detailUrl;
 
@@ -775,47 +886,57 @@ var JSONParser = new function() {
           imgUrl = pages[i].imageinfo[0].thumburl;
           detailUrl = pages[i].imageinfo[0].descriptionurl;
           WikipediaAppInteraction.postFullSizeImageMessage(
-              imgUrl, fileName, detailUrl, sequenceNo);
+            imgUrl,
+            fileName,
+            detailUrl,
+            sequenceNo,
+          );
 
           break;
         } else {
-          WikipediaAppInteraction.postErrorMessage(Errors.imageInsertionFailure,
-                                                   sequenceNo);
+          WikipediaAppInteraction.postErrorMessage(
+            Errors.imageInsertionFailure,
+            sequenceNo,
+          );
         }
       }
     }
   };
 
   // The result of the article's reference
-  this.updateReferenceCallback = function(json) {
+  this.updateReferenceCallback = function (json) {
     var sequenceNo = WikipediaAppInteraction.wikipediaSequenceNo;
 
     if (json.mobileview && json.mobileview.sections) {
       var content = json.mobileview.sections[0];
       if (content.id > 0) {
         WikipediaAppInteraction.postContentMessage(
-            "updateReferenceCallback",
-            StrUtil.replaceDoubleBackSlashWithHTTPS(content.text), sequenceNo);
+          "updateReferenceCallback",
+          StrUtil.replaceDoubleBackSlashWithHTTPS(content.text),
+          sequenceNo,
+        );
       }
     }
   };
 
   // The query result of suggested article result
-  this.searchWikiCallback = function(json) {
+  this.searchWikiCallback = function (json) {
     var sequenceNo = WikipediaAppInteraction.wikipediaSequenceNo;
     var hasArticle =
-        (json.query.searchinfo && json.query.searchinfo.totalhits > 0);
+      json.query.searchinfo && json.query.searchinfo.totalhits > 0;
 
     if (json.error) {
       WikipediaAppInteraction.postErrorMessage(
-          Errors.wikipedia + " " + json.error.code + ": " + json.error.info,
-          sequenceNo);
+        Errors.wikipedia + " " + json.error.code + ": " + json.error.info,
+        sequenceNo,
+      );
     } else if (hasArticle) {
       hasArticle = false;
       var results = json.query.search;
       var content = CodeSnippet.newSearchResultTotal(
-          json.query.searchinfo.totalhits,
-          WikipediaAppInteraction.wikipediaSearchTitle);
+        json.query.searchinfo.totalhits,
+        WikipediaAppInteraction.wikipediaSearchTitle,
+      );
 
       for (var i = 0; i < results.length; i++) {
         if (!Wikipedia.isAFile(results[i].title)) {
@@ -825,23 +946,31 @@ var JSONParser = new function() {
       }
 
       if (hasArticle) {
-        WikipediaAppInteraction.postContentMessage("searchWikiCallback",
-                                                   content, sequenceNo);
+        WikipediaAppInteraction.postContentMessage(
+          "searchWikiCallback",
+          content,
+          sequenceNo,
+        );
 
         return;
       }
     }
 
-    WikipediaAppInteraction.postNoResultMessage(Errors.emptySearResult,
-                                                sequenceNo);
+    WikipediaAppInteraction.postNoResultMessage(
+      Errors.emptySearResult,
+      sequenceNo,
+    );
   };
 
   // The query result of the category term
-  this.updateCategoryCallback = function(json) {
+  this.updateCategoryCallback = function (json) {
     var sequenceNo = WikipediaAppInteraction.wikipediaSequenceNo;
 
-    if (json.query && json.query.categorymembers &&
-        json.query.categorymembers.length > 0) {
+    if (
+      json.query &&
+      json.query.categorymembers &&
+      json.query.categorymembers.length > 0
+    ) {
       var subcat = StrUtil.empty;
       var pages = StrUtil.empty;
       var members = json.query.categorymembers;
@@ -863,20 +992,29 @@ var JSONParser = new function() {
         article += CodeSnippet.categoryPagesTitle() + pages;
       }
 
-      WikipediaAppInteraction.postContentMessage("updateCategoryCallback",
-                                                 article, sequenceNo);
+      WikipediaAppInteraction.postContentMessage(
+        "updateCategoryCallback",
+        article,
+        sequenceNo,
+      );
     } else {
       WikipediaAppInteraction.postErrorMessage(Errors.category, sequenceNo);
     }
   };
-}();
+})();
 
-window.onload = function() {
+window.onload = function () {
   WikipediaAppInteraction.initial();
 
   window.addEventListener(
-      "message", WikipediaAppInteraction.wikipediaEventListener, false);
+    "message",
+    WikipediaAppInteraction.wikipediaEventListener,
+    false,
+  );
 
   navigator.serviceWorker.addEventListener(
-      "message", Wikipedia.serviceWorkerEventListener, false);
+    "message",
+    Wikipedia.serviceWorkerEventListener,
+    false,
+  );
 };
